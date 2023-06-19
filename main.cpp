@@ -16,8 +16,9 @@ void CircularDoubleLinkedList();
 void selectionSort(int data[], int n);
 void merge(int data[], int low, int mid, int high);
 void mergeSort(int data[], int low, int high);
+void insertionSort(int data[], int n);
 int main() {
-    int opcao = 4;
+    int opcao = 6;
     if (opcao == 1)
         linerLinkedList();
     else if (opcao == 2)
@@ -25,11 +26,28 @@ int main() {
     else if (opcao == 3)
         CircularlinerLinkedList();
     else if (opcao == 4) {
-        int n = 4;
-        int data[] = {3, 10, 1, 15};
+        int n = 6;
+        int data[] = {3, 10, 1, 15,14, 1};
         selectionSort(data, n);
-        for (int i = 0; i < n; i++)
-            printf("%d ", data[i]);
+    }
+    else if ( opcao == 5 ) {
+        int n = 7;
+        int data[] = {3, 10, 1, 15,14,13, 12};
+        insertionSort(data,n);
+
+
+    }
+    else if ( opcao ==6 ) {
+        int n = 7;
+        int data[] = {3, 10, 1, 15,14,13, 12};
+        for (int k = 0; k < n; k++) {
+            printf("%d ", data[k]);
+        }
+        printf("\n");
+        mergeSort(data,0,6);
+        for (int k = 0; k < n; k++) {
+            printf("%d ", data[k]);
+        }
         printf("\n");
     }
 
@@ -97,23 +115,62 @@ void swap(int *v, int a1, int a2) {
 
 //N = (n-1) + (n-2) + ... + 2 + 1 = n(n-1)/2 O(n^2)
 void selectionSort(int data[], int n) {
+    for (int k = 0; k < n; k++)
+        printf("%d ", data[k]);
+    printf("\n");
+
     for (int i = 0, least, j; i < n - 1; i++) {
         for (j = i + 1, least = i; j < n; j++)
             if (data[j] < data[least])
                 least = j;
+        printf("troca indece %d [%d] pelo indece %d [%d] \n",least,data[least],i, data[i]);
         swap(data, least, i);
+        for (int k = 0; k < n; k++)
+            printf("%d ", data[k]);
+        printf("\n");
+
     }
 }
 
 // Número de comparações  N = 1 + 2 + (n-2) + (n-1) = n(n-1)/2
 // O(n^2)
 void insertionSort(int data[], int n) {
+    printf("Insertion sort \n");
+    for (int i = 0; i < n; i++)
+        printf("%d ", data[i]);
+    printf("\n");
+    int passo = 0;
+
     for (int i = 1, j; i < n; i++) {
+        passo +=1;
         int tmp = data[i];
-        for (j = i; j > 0 && tmp < data[j - 1]; j--)
+        if ( j > 0 && tmp < data[j-i ])
+            printf("\nEntra no  %d ciclo com o valor do indece %d [%d]\n",passo, i, tmp);
+        else {
+            printf("\nNao entrou no %d ciclo com o indece %d [%d]\n",passo,i,tmp);
+        }
+        for (j = i; j > 0 && tmp < data[j - 1]; j--) {
+            printf("coloca o valor do indice %d [%d] no indice %d [%d]\n", j-1,data[j-1] ,j, data[j]);
             data[j] = data[j - 1];
+            printf("Resultado da troca \n");
+            for (int k = 0; k < n; k++) {
+                printf("%d ", data[k]);
+            }
+            printf("\n");
+
+        }
+        printf("Repoe %d  no indece %d\n",tmp,j);
         data[j] = tmp;
+        for (int k = 0; k < n; k++) {
+            printf("%d ", data[k]);
+        }
+        printf("\n");
+
     }
+    for (int k = 0; k < n; k++)
+        printf("%d ", data[k]);
+    printf("\n");
+
 }
 
 //O(n log n).
@@ -121,12 +178,13 @@ void merge(int data[], int low, int mid, int high) {
     int lowEnd = mid - 1;
     int tmpPos = low;
     int numElements = high - low + 1;
+    int temp[7];
     // Copiar para a array temporária
     while (low <= lowEnd && mid <= high)
         if (data[low] <= data[mid])
             temp[tmpPos++] = data[low++];
         else
-            temp[tmpPos++] = a[mid++];
+            temp[tmpPos++] = data[mid++];
     // Copiar o resto da metade inferior
     while (low <= lowEnd)
         temp[tmpPos++] = data[low++];
@@ -135,9 +193,10 @@ void merge(int data[], int low, int mid, int high) {
         temp[tmpPos++] = data[mid++];
     //Copiar de volta
     for (int i = 0; i < numElements; i++, high--)
-        a[high] = temp[high];
+        data[high] = temp[high];
 }
 
+// O ( n log n)
 void mergeSort(int data[], int low, int high) {
     if (low < high) {
         int mid = (low + high) / 2;
